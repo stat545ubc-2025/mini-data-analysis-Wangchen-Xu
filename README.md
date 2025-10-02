@@ -12,6 +12,11 @@ This project is used for the **Mini Data Analysis Project 1** in **STAT 545A**.
 
 ---
 
-### ✅ **Notes**
-- Knit with `output: github_document` for submission.
-- Written in **R** using **tidyverse** and **R Markdown**.
+## 🏃‍♂️ How to Run `mini-project-1.Rmd`
+
+1. **Clone this repository** to your local machine  
+   Repo: <https://github.com/stat545ubc-2025/mini-data-analysis-Wangchen-Xu.git>
+
+   ```bash
+   git clone https://github.com/stat545ubc-2025/mini-data-analysis-Wangchen-Xu.git
+
