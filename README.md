@@ -1,8 +1,6 @@
 STAT 545A Mini Data Analysis Project 1
 ================
 
-# **STAT 545A Mini Data Analysis Project 1**
-
 This project is used for the **Mini Data Analysis Project 1** in **STAT
 545A**.
 
