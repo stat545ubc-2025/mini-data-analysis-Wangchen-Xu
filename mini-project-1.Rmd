@@ -82,10 +82,10 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: CHOICE_1\_HERE\
-2: CHOICE_2\_HERE\
-3: CHOICE_3\_HERE\
-4: CHOICE_4\_HERE
+**1: CHOICE_1\_cancer_sample**\
+**2: CHOICE_2\_flow_sample**\
+**3: CHOICE_3\_parking_meters**\
+**4: CHOICE_4\_steam_games**
 
 <!----------------------------------------------------------------------------->
 
@@ -97,7 +97,32 @@ And that is exactly the first thing that you will do!
 
 ```{r}
 ### EXPLORE HERE ###
-steam_games
+
+library(dplyr)
+library(tibble)
+
+# rename the data for coding clarity
+cs <- datateachr::cancer_sample
+fs <- datateachr::flow_sample
+pm <- datateachr::parking_meters
+sg <- datateachr::steam_games
+# build attributes function with 4 attributes
+attributes <- function(x, name){
+  tibble(
+    dataset      = name,
+    class_type   = class(x)[1],
+    n_rows       = nrow(x),
+    n_columns    = ncol(x)       
+    
+  )
+}
+summary_1.2 <- bind_rows(
+  attributes(cs, "cancer_sample"),
+  attributes(fs, "flow_sample"),
+  attributes(pm, "parking_meters"),
+  attributes(sg, "steam_games")
+)
+summary_1.2
 ```
 
 <!----------------------------------------------------------------------------->
@@ -106,12 +131,14 @@ steam_games
 
 <!-------------------------- Start your work below ---------------------------->
 
+**I chose steam_games. Besides personal interest as a gamer, this dataset has a rich mix of numeric and categorical variables, a large sample size for meaningful summaries, and clear opportunities to explore relationships. This variety makes it well-suited for practicing dplyr wrangling and ggplot2 visualization.**
+
 <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a  final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with your dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
-
+**Research question: How is a game’s price associated with the share of positive user ratings, and does this relationship differ by release year?**
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -140,6 +167,99 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 2.2 **(4 points)** For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+library(dplyr); library(ggplot2); library(datateachr); library(readr)
+
+datateachr::steam_games %>%
+  mutate(
+    disc_price = if (is.character(discount_price)) readr::parse_number(discount_price) else as.numeric(discount_price)
+  ) %>%
+  ggplot(aes(disc_price)) +
+  geom_histogram(bins = 30, na.rm = TRUE) +
+  labs(title = "Question1: Distribution of discount price", x = "Discount price (USD)", y = "Count") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+<div style="clear: both;"></div>
+**Reasons and explanations:** A histogram of discount price reveals range, skew, modes, and outliers essential context before any group comparisons.I coerce discount_price to numeric and plot with geom_histogram(bins = 30). Labels clarify units; the plot establishes typical values and highlights outliers that could affect later analyses.
+
+```{r}
+# Relationship between two variables: original vs. discount price
+library(dplyr)
+library(ggplot2)
+library(datateachr)
+
+datateachr::steam_games %>%
+  mutate(
+    orig_price = as.numeric(as.character(original_price)),
+    disc_price = as.numeric(as.character(discount_price))
+  ) %>%
+  filter(
+    !is.na(orig_price), !is.na(disc_price),
+    orig_price >= 0, disc_price >= 0,
+    disc_price <= orig_price          
+  ) %>%
+  ggplot(aes(x = orig_price, y = disc_price)) +
+  geom_point(alpha = 0.25) +
+  geom_smooth(method = "loess", se = TRUE) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2) +
+  labs(title = "Question4: Original vs. Discount Price",
+       x = "Original price (USD)", y = "Discount price (USD)") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+<div style="clear: both;"></div>
+**Reasons and explanations:** The scatter of original vs. discount price tests the strength and pattern of discounting. Points should lie on or below the 45° line; distance below indicates discount depth. I safely convert price columns to numeric, filter invalid cases (e.g., missing or negative values, and ensure discount ≤ original), then plot geom_point() with a LOESS trend (geom_smooth()) and a 45° reference line (geom_abline()).
+
+```{r}
+library(dplyr); library(ggplot2); library(datateachr); library(readr)
+library(tidyr)
+
+df <- datateachr::steam_games %>%
+  mutate(
+    orig_price = if (is.numeric(original_price)) original_price else readr::parse_number(as.character(original_price)),
+    disc_price = if (is.numeric(discount_price)) discount_price else readr::parse_number(as.character(discount_price))
+  ) %>%
+  select(orig_price, disc_price) %>%
+  pivot_longer(everything(), names_to = "price_type", values_to = "price") %>%
+  filter(!is.na(price), price >= 0)
+
+ylim_max <- quantile(df$price, 0.935, na.rm = TRUE) #this idea was from AI, because at the very beginning all my data was crammed together.
+
+ggplot(df, aes(x = price_type, y = price)) +
+  geom_boxplot(outlier.alpha = 0.25) +
+  coord_cartesian(ylim = c(0, ylim_max)) +           # <— zoom y-axis, this idea was from AI
+  labs(title = "Question6: Price distributions (original vs. discount)",
+       x = "Price type", y = "USD (zoomed)") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+<div style="clear: both;"></div>
+
+**Reasons and explanations:**  Boxplots summarize center, spread, and outliers. Comparing original vs discount prices shows how discounting shifts the price distribution.I convert both price columns to numeric, reshape to long with two levels (original/discount), then use geom_boxplot() to compare distributions side-by-side.
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(datateachr)
+
+datateachr::steam_games %>%
+  mutate(
+    disc_price = as.numeric(as.character(discount_price))
+  ) %>%
+  filter(!is.na(disc_price), disc_price >= 0) %>%
+  ggplot(aes(x = disc_price)) +
+  geom_density(na.rm = TRUE) +
+  labs(title = "Question8: Density of Discount Price",
+       x = "Discount price (USD)", y = "Density") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+<div style="clear: both;"></div>
+**Reasons and explanations:**  A density plot is ideal for continuous variables. Using it on discount price shows the overall shape (modes, skew, tails) more smoothly than a histogram, revealing common price points and whether values cluster or spread. I coerce discount_price to numeric, filter invalid or missing values, then plot with geom_density(). This focuses the visualization on the distribution rather than counts in fixed bins, making patterns easier to see.
 
 <!----------------------------------------------------------------------------->
 
@@ -148,6 +268,20 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 **(4 points)** So far, you have chosen a dataset and gotten familiar with it through exploring the data. You have also brainstormed one research question that interested you (Task 1.4).  Now it's time to pick 4 research questions that you would like to explore in Milestone 2! Write the 4 questions and any additional comments below. 
 
 <!--- *****START HERE***** --->
+**Research Questions for Milestone 2**
+
+1) **Do newer games cost more?**  
+   Compare **original_price** across **release_year**.
+
+2) **How big are discounts?**  
+   Look at the distribution of **discount_rate = (original − discount) / original**.
+
+3) **Do original and discount prices move together?**  
+   Plot **original_price** vs **discount_price** and describe the pattern.
+
+4) **Do age/achievements relate to price?**  
+   Check how **(original or discount) price** varies by **required_age** or **achievements** bins.
+
 
 <!----------------------------->
 
