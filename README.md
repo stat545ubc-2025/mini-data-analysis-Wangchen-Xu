@@ -12,17 +12,24 @@ This project is used for the **Mini Data Analysis Project 1** in **STAT
 
 - **mini-project-1.md** — *Knitted project deliverable file*
 
-- **README.md** — *This file*
+- **mini-project-1.files** — *some figures*
 
-- **README.rmd** — *a knitted readme file*
+- **README.md**
+
+- **README.rmd**
 
 ------------------------------------------------------------------------
 
-## 🏃‍♂️ How to Run `mini-project-1.Rmd`
+## 😊 **How to Run `mini-project-1.Rmd`**
 
 1.  **Clone this repository** to your local machine  
     Repo:
     <https://github.com/stat545ubc-2025/mini-data-analysis-Wangchen-Xu.git>
 
-    \`\`\`bash git clone
-    <https://github.com/stat545ubc-2025/mini-data-analysis-Wangchen-Xu.git>
+2.  **Open the R Markdown file (mini-project-1.Rmd) in R Studio.**
+
+3.  **Installpackages datateachr, tidyverse**  
+    `install.packages("devtools")`  
+    `devtools::install_github("UBC-MDS/datateachr")`
+
+4.  **Knit the mini-project-1.Rmd file to view the analysis in HTML**
