@@ -1,6 +1,6 @@
 ---
 title: "Mini Data-Analysis Deliverable 1"
-output: html_document
+output: github_document
 ---
 
 # Welcome to your (maybe) first-ever data analysis project!
@@ -106,7 +106,7 @@ cs <- datateachr::cancer_sample
 fs <- datateachr::flow_sample
 pm <- datateachr::parking_meters
 sg <- datateachr::steam_games
-# build attributes function with 4 attributes
+
 attributes <- function(x, name){
   tibble(
     dataset      = name,
