@@ -242,7 +242,6 @@ theme(plot.title = element_text(hjust = 0.5))
 
 st_games <- st_games %>%
   mutate(discount_rate = if_else(original_price > 0,(original_price - discount_price)/original_price, NA))
-
 q2_summary <- st_games %>%
   summarise(num_discounted = sum(discount_rate > 0, na.rm = TRUE),
             num_total = sum(!is.na(discount_rate)),
@@ -506,13 +505,12 @@ st_games <- datateachr::steam_games %>%
 
 ``` r
 st_games <- datateachr::steam_games %>%
-  separate(
-    release_date,
-    into = c(NA, "release_year"),
-    # we can simply get rid of month_date, since we only compare the data based on release year.
-    sep = ",\\s*",
-    remove = TRUE,
-    convert = TRUE)
+  separate(release_date,
+           into = c(NA, "release_year"),
+           # we can simply get rid of month_date, since we only compare the data based on release year.
+           sep = ",\\s*",
+           remove = TRUE,
+           convert = TRUE)
 ```
 
     ## Warning: Expected 2 pieces. Additional pieces discarded in 1 rows [36325].
@@ -531,8 +529,8 @@ analysis in the remaining tasks:
 
 <!-------------------------- Start your work below ---------------------------->
 
-1.  *FILL_THIS_IN*
-2.  *FILL_THIS_IN*
+1.  *Do original and discount prices move together?*
+2.  *Do achievements relate to price?*
 
 <!----------------------------------------------------------------------------->
 
@@ -540,6 +538,14 @@ Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
 
+First of all, both question have many exist data, so we don’t need to
+tidy or make up some extra data list, and they are suitable for many
+tasks in the previous part. Secondly, all these `price` and
+`achievements` data are easy to plot by using class method – dplyr and
+ggplot. Lastly, personally speaking, I am interested in these two
+questions, as I haven’t noticed the relationship between achievement and
+game price before, and price problems are just very common to every game
+fans.
 <!----------------------------------------------------------------------------->
 
 Now, try to choose a version of your data that you think will be
@@ -562,9 +568,9 @@ these.
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Research Question**: FILL_THIS_IN
+**Research Question**: Do original and discount prices move together?
 
-**Variable of interest**: FILL_THIS_IN
+**Variable of interest**: `discount_price`
 
 <!----------------------------------------------------------------------------->
 
@@ -589,6 +595,32 @@ specifics in STAT 545.
     coefficients.
 
 <!-------------------------- Start your work below ---------------------------->
+
+``` r
+st_games_model <- st_games %>%
+  dplyr::filter(!is.na(original_price), !is.na(discount_price))
+task3_1 <- lm(discount_price ~ original_price, data = st_games_model)
+summary(task3_1)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = discount_price ~ original_price, data = st_games_model)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -175.74  -39.01  -27.78   -2.92  914.18 
+    ## 
+    ## Coefficients:
+    ##                Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)    45.11835    0.94605   47.69   <2e-16 ***
+    ## original_price  0.22026    0.01174   18.76   <2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 99.32 on 12176 degrees of freedom
+    ## Multiple R-squared:  0.0281, Adjusted R-squared:  0.02802 
+    ## F-statistic:   352 on 1 and 12176 DF,  p-value: < 2.2e-16
 
 <!----------------------------------------------------------------------------->
 
