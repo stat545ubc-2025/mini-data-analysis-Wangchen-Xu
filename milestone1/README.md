@@ -12,6 +12,8 @@ This project is used for the **Mini Data Analysis Project 1\* in **STAT
 
 - **mini-project-1.md** — *Knitted project deliverable file*
 
+- **mini-project-1_files** — *output figures for milestone1*
+
 - **README.md**
 
 - **README.rmd**

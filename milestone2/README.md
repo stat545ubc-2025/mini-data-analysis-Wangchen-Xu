@@ -13,6 +13,8 @@ questions in milestone 1.
 
 - **mini-project-2.md** — *Knitted project deliverable file*
 
+- **mini-project-2_files** — *Output figures for milestone2*
+
 - **README.md**
 
 - **README.rmd**

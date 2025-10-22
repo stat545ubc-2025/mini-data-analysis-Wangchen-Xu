@@ -11,7 +11,9 @@ This project is used for the **Mini Data Analysis Project 2** in **STAT 545A**. 
 
 - **mini-project-2.Rmd** — *Project deliverable file*  
 
-- **mini-project-2.md** — *Knitted project deliverable file*  
+- **mini-project-2.md** — *Knitted project deliverable file*
+
+- **mini-project-2_files** — *Output figures for milestone2* 
 
 - **README.md** 
 
