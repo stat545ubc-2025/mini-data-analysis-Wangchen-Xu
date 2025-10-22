@@ -481,9 +481,45 @@ and “after”.
 
 <!--------------------------- Start your work below --------------------------->
 
-**My untidy data** st_games \<- datateachr::steam_games %\>%
-separate(release_date, into = c(“month_day”, “year”), sep = “,\s\*“,  
-remove = FALSE) %\>% mutate(release_year = as.integer(year)
+**My untidy data**
+
+``` r
+st_games <- datateachr::steam_games %>%
+  separate(release_date,
+           into = c("month_day", "year"),
+           sep = ",\\s*",        
+           remove = FALSE) %>%
+  mutate(release_year = as.integer(year))
+```
+
+    ## Warning: Expected 2 pieces. Additional pieces discarded in 1 rows [36325].
+
+    ## Warning: Expected 2 pieces. Missing pieces filled with `NA` in 4745 rows [6, 16, 26, 40,
+    ## 45, 58, 64, 67, 69, 75, 82, 87, 103, 106, 107, 115, 120, 134, 136, 146, ...].
+
+    ## Warning: There was 1 warning in `mutate()`.
+    ## ℹ In argument: `release_year = as.integer(year)`.
+    ## Caused by warning:
+    ## ! NAs introduced by coercion
+
+**After tidying my data**
+
+``` r
+st_games <- datateachr::steam_games %>%
+  separate(
+    release_date,
+    into = c(NA, "release_year"),
+    # we can simply get rid of month_date, since we only compare the data based on release year.
+    sep = ",\\s*",
+    remove = TRUE,
+    convert = TRUE)
+```
+
+    ## Warning: Expected 2 pieces. Additional pieces discarded in 1 rows [36325].
+
+    ## Warning: Expected 2 pieces. Missing pieces filled with `NA` in 4745 rows [6, 16, 26, 40,
+    ## 45, 58, 64, 67, 69, 75, 82, 87, 103, 106, 107, 115, 120, 134, 136, 146, ...].
+
 <!----------------------------------------------------------------------------->
 
 ### 2.3 (4 points)

@@ -7,23 +7,17 @@ questions in milestone 1.
 
 ------------------------------------------------------------------------
 
-## 📚 **Files in This Repository**
+## 📚 **Folders in This Repository**
 
-- **mini-project-1.Rmd** — *Project deliverable file*
+- **milestone1** — *files for milestone1*
 
-- **mini-project-1.md** — *Knitted project deliverable file*
+- **milestone2** — *files for milestone2*
 
-- **mini-project-1.files** — *some figures*
+- **output** — *some output figures for the two milestones*
 
-- **mini-project-2.Rmd** — *Project deliverable file*
+- **README.md** - *main README file for the whole project*
 
-- **mini-project-2.md** — *Knitted project deliverable file*
-
-- **mini-project-2.files** — *some figures for milestone2*
-
-- **README.md**
-
-- **README.rmd**
+- **README.rmd** - *main README file for the whole project*
 
 ------------------------------------------------------------------------
 

@@ -140,7 +140,6 @@ theme(plot.title = element_text(hjust = 0.5))
 
 st_games <- st_games %>%
   mutate(discount_rate = if_else(original_price > 0,(original_price - discount_price)/original_price, NA))
-
 q2_summary <- st_games %>%
   summarise(num_discounted = sum(discount_rate > 0, na.rm = TRUE),
             num_total = sum(!is.na(discount_rate)),
@@ -305,12 +304,25 @@ Be sure to explain your reasoning for this task. Show us the "before" and "after
 
 <!--------------------------- Start your work below --------------------------->
 **My untidy data**
+```{r}
 st_games <- datateachr::steam_games %>%
   separate(release_date,
            into = c("month_day", "year"),
            sep = ",\\s*",        
            remove = FALSE) %>%
-  mutate(release_year = as.integer(year)
+  mutate(release_year = as.integer(year))
+```
+
+**After tidying my data**
+```{r}
+st_games <- datateachr::steam_games %>%
+  separate(release_date,
+           into = c(NA, "release_year"),
+           # we can simply get rid of month_date, since we only compare the data based on release year.
+           sep = ",\\s*",
+           remove = TRUE,
+           convert = TRUE)
+```
 <!----------------------------------------------------------------------------->
 
 ### 2.3 (4 points)
@@ -319,15 +331,15 @@ Now, you should be more familiar with your data, and also have made progress in 
 
 <!-------------------------- Start your work below ---------------------------->
 
-1.  *FILL_THIS_IN*
-2.  *FILL_THIS_IN*
+1. *Do original and discount prices move together?*
+2. *Do achievements relate to price?*
 
 <!----------------------------------------------------------------------------->
 
 Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
-
+First of all, both question have many exist data, so we don't need to tidy or make up some extra data list, and they are suitable for many tasks in the previous part. Secondly, all these `price` and `achievements` data are easy to plot by using class method -- dplyr and ggplot. Lastly, personally speaking, I am interested in these two questions, as I haven't noticed the relationship between achievement and game price before, and price problems are just very common to every game fans. 
 <!----------------------------------------------------------------------------->
 
 Now, try to choose a version of your data that you think will be appropriate to answer these 2 questions. Use between 4 and 8 functions that we've covered so far (i.e. by filtering, cleaning, tidy'ing, dropping irrelevant columns, etc.).
@@ -344,9 +356,9 @@ Pick a research question from 1.2, and pick a variable of interest (we'll call i
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Research Question**: FILL_THIS_IN
+**Research Question**: Do original and discount prices move together?
 
-**Variable of interest**: FILL_THIS_IN
+**Variable of interest**: `discount_price`
 
 <!----------------------------------------------------------------------------->
 
@@ -361,7 +373,12 @@ Fit a model or run a hypothesis test that provides insight on this variable with
     -   You could use `lm()` to test for significance of regression coefficients.
 
 <!-------------------------- Start your work below ---------------------------->
-
+```{r}
+st_games_model <- st_games %>%
+  dplyr::filter(!is.na(original_price), !is.na(discount_price))
+task3_1 <- lm(discount_price ~ original_price, data = st_games_model)
+summary(task3_1)
+```
 <!----------------------------------------------------------------------------->
 
 ## 3.2 (3 points)
@@ -373,7 +390,9 @@ Produce something relevant from your fitted model: either predictions on Y, or a
 -   Obtain your results using the `broom` package if possible. If your model is not compatible with the broom function you're needing, then you can obtain your results by some other means, but first indicate which broom function is not compatible.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
 
+```
 <!----------------------------------------------------------------------------->
 
 # Task 4: Reading and writing data
