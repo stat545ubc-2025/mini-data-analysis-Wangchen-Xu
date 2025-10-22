@@ -1,6 +1,6 @@
 ---
 title: "Mini Data Analysis Milestone 2"
-output: html_document
+output: github_document
 ---
 
 *To complete this milestone, you can edit [this `.rmd` file](https://github.com/UBC-STAT/STAT545.github.io/blob/main/content/mini-data-analysis/mini-project-2.Rmd) directly. Fill in the sections that are commented out with `<!--- start your work here--->`. When you are done, make sure to knit to an `.md` file by changing the output in the YAML header to `github_document`, before submitting a tagged release on canvas.*
@@ -56,10 +56,10 @@ From Milestone 1, you should have an idea of the basic structure of your dataset
 First, write out the 4 research questions you defined in milestone 1 were. This will guide your work through milestone 2:
 
 <!-------------------------- Start your work below ---------------------------->
-1. *FILL_THIS_IN*
-2. *FILL_THIS_IN*
-3. *FILL_THIS_IN*
-4. *FILL_THIS_IN*
+1. *Do newer games cost more?*
+2. *How big are discounts?*
+3. *Do original and discount prices move together?*
+4. *Do achievements relate to price?*
 <!----------------------------------------------------------------------------->
 
 Here, we will investigate your data using various data manipulation and graphing functions.
@@ -93,6 +93,70 @@ Make sure it's clear what research question you are doing each operation for!
 
 <!------------------------- Start your work below ----------------------------->
 
+**Research question 1: Do newer games cost more?**
+```{r}
+# Summarizing for research question 1: Do newer games cost more?
+# Compute the price_range, mean, median, and max_price of original price across the groups of release_years.
+
+st_games <- datateachr::steam_games %>%
+  separate(release_date,
+           into = c("month_day", "year"),
+           sep = ",\\s*",        
+           remove = FALSE) %>%
+  mutate(release_year = as.integer(year)) 
+# We need to separate the release_date, because data are in the form of (month_day,year).
+
+q1_summary  <- st_games %>%
+  filter(!is.na(release_year)) %>%
+  group_by(release_year) %>%
+  summarise(n = n(),
+            price_range = max(original_price, na.rm = TRUE) - min(original_price, na.rm = TRUE),
+            mean_price  = mean(original_price, na.rm = TRUE),
+            median_price = median(original_price, na.rm = TRUE),
+            max_price   = max(original_price, na.rm = TRUE)) %>%
+arrange(desc(release_year))
+q1_summary  
+```
+
+```{r}
+# Graphing for research question 1
+# Make a graph where it makes sense to customize the alpha transparency.
+
+ggplot(st_games, aes(x = release_year, y = original_price)) +
+  geom_point(alpha = 0.5) +
+  coord_cartesian(ylim = c(0, 700)) +
+# By previous summary, we can see most of the prices are under 700, so we can zoom the y axis for a clear view.
+  labs(title = "Original price vs release year",
+       x = "Release year",
+       y = "Original price") +
+theme_minimal()
+```
+
+**Research question 2: How big are discounts??**
+```{r}
+# Compute the number of discounted games and the proportion.
+# We need to first filter those original price that greater than 0, otherwise they couldn't be discounted.
+
+st_games <- st_games %>%
+  mutate(discount_rate = if_else(original_price > 0,(original_price - discount_price)/original_price, NA))
+
+q2_summary <- st_games %>%
+  summarise(num_discounted = sum(discount_rate > 0, na.rm = TRUE),
+            num_total = sum(!is.na(discount_rate)),
+            discounted_proportion = num_discounted / num_total)
+q2_summary
+```
+
+```{r}
+ggplot(st_games, aes(x = original_price, y = discount_rate)) +
+  geom_point(alpha = 0.25) +     
+  coord_cartesian(xlim = c(1, 200), ylim = c(0, 1)) +  # zooms view; does NOT drop data
+  labs(title = "RQ2: Discount rate vs original price (alpha for overplotting)",
+       x = "Original price",
+       y = "Discount rate") +
+  theme_minimal()
+
+```
 <!----------------------------------------------------------------------------->
 
 ### 1.3 (2 points)
