@@ -421,11 +421,14 @@ close to the answers. As I can tell that:
 For question1: When the release year updates, the game’s price tend to
 rise.  
 For question 2: Most of the games have a discount rate of 0.5, which is
-common in the real world.  
+make sense in the real world.  
 For question 3: Original and discount prices do move together, which can
 be clearly seen in q3_plot.  
-For question 4: We can see prices are expensive in achievement level
-(51-100).  
+For question 4: We can see prices are extremely expensive in achievement
+level (51-100).  
+I’ve investigated my data a bit more, question 4 yields interesting
+result, I haven’t noticed before that there are any relationship between
+the achievements of game and their prices.
 
 <!----------------------------------------------------------------------------->
 
@@ -448,6 +451,21 @@ pick 8, and explain whether the data is untidy or tidy.
 
 <!--------------------------- Start your work below --------------------------->
 
+Most of My data are tidy  
+1 `original_price`: it’s one numerical price value per cell. Tidy  
+2 `discount_price`: it’s one numerical price value per cell. Tidy  
+3 `discount_rate`: it’s one numerical price value per cell. Tidy  
+4 `price_bucket`: it’s a categorical value for different price range,
+and it’s one value per game, so it’s tidy.  
+5 `achievements`: it’s one integer value per cell. Tidy  
+6 `ach_level`: it’s another categorical value for different achievement
+numbers, and it’s one value per game. Tidy  
+7 `st_games`: it’s one observation per row. Tidy  
+8 `month_day`: there are two variables (month, day) in one column. If we
+check the data list for `steam_games`, the `release_date` goes like
+this: September 1,2025. What I did now was only separating the
+`release_date` to `month_date` and `year`, there are actually two data
+in `month_date` column, which is not tidy.
 <!----------------------------------------------------------------------------->
 
 ### 2.2 (4 points)
@@ -463,6 +481,9 @@ and “after”.
 
 <!--------------------------- Start your work below --------------------------->
 
+**My untidy data** st_games \<- datateachr::steam_games %\>%
+separate(release_date, into = c(“month_day”, “year”), sep = “,\s\*“,  
+remove = FALSE) %\>% mutate(release_year = as.integer(year)
 <!----------------------------------------------------------------------------->
 
 ### 2.3 (4 points)

@@ -284,6 +284,15 @@ Based on the definition above, can you identify if your data is tidy or untidy? 
 
 <!--------------------------- Start your work below --------------------------->
 
+Most of My data are tidy\
+1 `original_price`: it's one numerical price value per cell. Tidy\
+2 `discount_price`: it's one numerical price value per cell. Tidy\
+3 `discount_rate`: it's one numerical price value per cell. Tidy\
+4 `price_bucket`: it's a categorical value for different price range, and it's one value per game, so it's tidy.\
+5 `achievements`: it's one integer value per cell. Tidy\
+6 `ach_level`: it's another categorical value for different achievement numbers, and it's one value per game. Tidy\
+7 `st_games`: it's one observation per row. Tidy\
+8 `month_day`: there are two variables (month, day) in one column. If we check the data list for `steam_games`, the `release_date` goes like this: September 1,2025. What I did now was only separating the `release_date` to `month_date` and `year`, there are actually two data in `month_date` column, which is not tidy. 
 <!----------------------------------------------------------------------------->
 
 ### 2.2 (4 points)
@@ -295,7 +304,13 @@ If your data is untidy, then tidy it! Then, untidy it back to it's original stat
 Be sure to explain your reasoning for this task. Show us the "before" and "after".
 
 <!--------------------------- Start your work below --------------------------->
-
+**My untidy data**
+st_games <- datateachr::steam_games %>%
+  separate(release_date,
+           into = c("month_day", "year"),
+           sep = ",\\s*",        
+           remove = FALSE) %>%
+  mutate(release_year = as.integer(year)
 <!----------------------------------------------------------------------------->
 
 ### 2.3 (4 points)
