@@ -403,6 +403,7 @@ ggplot(q4_plot, aes(x = ach_level, y = mean_op)) +
 ```
 
 ![](mini-project-2_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
 <!----------------------------------------------------------------------------->
 
 ### 1.3 (2 points)
@@ -414,6 +415,17 @@ refined, now that you’ve investigated your data a bit more? Which
 research questions are yielding interesting results?
 
 <!------------------------- Write your answer here ---------------------------->
+
+Answer for 1.3: I think for most of my research questions, they are very
+close to the answers. As I can tell that:  
+For question1: When the release year updates, the game’s price tend to
+rise.  
+For question 2: Most of the games have a discount rate of 0.5, which is
+common in the real world.  
+For question 3: Original and discount prices do move together, which can
+be clearly seen in q3_plot.  
+For question 4: We can see prices are expensive in achievement level
+(51-100).  
 
 <!----------------------------------------------------------------------------->
 
