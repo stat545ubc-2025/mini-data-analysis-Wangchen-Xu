@@ -221,6 +221,35 @@ theme(plot.title = element_text(hjust = 0.5))
 
 **Do achievements relate to price?**
 ```{r}
+# Create a categorical variable with 3 or more groups from an existing numerical variable. 
+st_games <- st_games %>%
+  mutate(ach_level = case_when(achievements == 0 ~ "None (0)",
+                               achievements <= 50 ~ "Low (1–50)",
+                               achievements <= 100 ~ "Medium (51–100)",
+                               achievements > 100 ~ "High (100+)",TRUE ~ NA_character_))
+st_games <- st_games %>%
+  mutate(ach_level = fct_infreq(ach_level))
+q4_summary <- st_games %>%
+  count(ach_level, name = "numbers of games")
+q4_summary
+```
+
+```{r}
+q4_plot <- st_games %>%
+  group_by(ach_level) %>%
+  summarise(n = n(),
+            mean_op = mean(original_price, na.rm = TRUE))
+ggplot(q4_plot, aes(x = ach_level, y = mean_op)) +
+  geom_col(width = 0.5, fill = "grey") +                              
+  geom_text(aes(label = paste0("$", format(round(mean_op, 2), big.mark=","))),
+            vjust = -0.4, size = 3) +                                    
+  scale_y_continuous(labels = function(x) paste0("$", format(x, big.mark=",")),
+                     expand = expansion(mult = c(0, 0.10))) + # Debugged by Chat-GPT, since the old y axis was too messy
+  labs(title = "Average of original price by achievement level",
+       x = "Achievement level",
+       y = "Average of original price") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 <!----------------------------------------------------------------------------->
 
