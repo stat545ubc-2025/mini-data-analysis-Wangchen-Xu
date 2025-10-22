@@ -1,0 +1,8 @@
+"0",""
+"0","# Medium bins"
+"0","ggplot(st_games, aes(x = discount_rate)) +"
+"0","  geom_histogram(binwidth = 0.05, boundary = 0) +"
+"0","  coord_cartesian(xlim = c(0, 1)) +"
+"0","  labs(title = ""RQ2: Discount rate — binwidth = 0.05"","
+"0","       x = ""Discount rate"", y = ""Count"") +"
+"0","  theme_minimal()"

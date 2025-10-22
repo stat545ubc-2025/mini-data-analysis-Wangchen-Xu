@@ -1,0 +1,30 @@
+"0","cat("""
+"0","**Research Questions for Milestone 2**"
+"0",""
+"0","1) **Do newer games cost more?**  "
+"0","   Compare **original_price** across **release_year**."
+"0",""
+"0","2) **How big are discounts?**  "
+"0","   Look at the distribution of **discount_rate = (original − discount) / original**."
+"0",""
+"0","3) **Do original and discount prices move together?**  "
+"0","   Plot **original_price** vs **discount_price** and describe the pattern."
+"0",""
+"0","4) **Do age/achievements relate to price?** *(if those columns exist)*  "
+"0","   Check how **(original or discount) price** varies by **required_age** or **achievements** bins."
+"0",""")"
+"1","
+**Research Questions for Milestone 2**
+
+1) **Do newer games cost more?**  
+   Compare **original_price** across **release_year**.
+
+2) **How big are discounts?**  
+   Look at the distribution of **discount_rate = (original − discount) / original**.
+
+3) **Do original and discount prices move together?**  
+   Plot **original_price** vs **discount_price** and describe the pattern.
+
+4) **Do age/achievements relate to price?** *(if those columns exist)*  
+   Check how **(original or discount) price** varies by **required_age** or **achievements** bins.
+"

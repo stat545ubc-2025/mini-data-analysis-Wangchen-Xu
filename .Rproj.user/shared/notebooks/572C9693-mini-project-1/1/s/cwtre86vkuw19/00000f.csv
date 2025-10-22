@@ -1,0 +1,9 @@
+"0","summary_1_2 <- bind_rows(
+  attrs(cs, ""cancer_sample""),
+  attrs(fs, ""flow_sample""),
+  attrs(pm, ""parking_meters""),
+  attrs(sg, ""steam_games"")
+)
+"
+"2","Error in attrs(cs, ""cancer_sample"") : could not find function ""attrs""
+"

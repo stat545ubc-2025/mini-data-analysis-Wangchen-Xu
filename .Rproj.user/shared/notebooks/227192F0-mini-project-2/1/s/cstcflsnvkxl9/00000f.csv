@@ -1,0 +1,6 @@
+"0","st_games <- datateachr::steam_games %>%"
+"0","  separate(release_date,"
+"0","           into = c(""month_day"", ""year""),"
+"0","           sep = "",\\s*"",        "
+"0","           remove = FALSE) %>%"
+"0","  mutate(release_year = as.integer(year))"
