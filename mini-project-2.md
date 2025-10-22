@@ -225,7 +225,8 @@ ggplot(st_games, aes(x = release_year, y = original_price)) +
   labs(title = "Original price vs release year",
        x = "Release year",
        y = "Original price") +
-theme_minimal()
+theme_minimal()+
+theme(plot.title = element_text(hjust = 0.5))
 ```
 
     ## Warning: Removed 6116 rows containing missing values or values outside the scale range
@@ -262,7 +263,8 @@ ggplot(st_games, aes(x = discount_rate)) +
   coord_cartesian(xlim = c(0, 1)) +   
   labs(title = "Discount rate with binwidth = 0.05",
        x = "Discount rate", y = "Number of games") +
-  theme_minimal()
+  theme_minimal()+
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
     ## Warning: Removed 28739 rows containing non-finite outside the scale range
@@ -277,7 +279,8 @@ ggplot(st_games, aes(x = discount_rate)) +
   coord_cartesian(xlim = c(0, 1)) +
   labs(title = "Discount rate with binwidth = 0.025",
        x = "Discount rate", y = "Number of games") +
-  theme_minimal()
+  theme_minimal()+
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
     ## Warning: Removed 28739 rows containing non-finite outside the scale range
@@ -292,7 +295,8 @@ ggplot(st_games, aes(x = discount_rate)) +
   coord_cartesian(xlim = c(0, 1)) +
   labs(title = "Discount rate with binwidth = 0.01",
        x = "Discount rate", y = "Number of games") +
-  theme_minimal()
+  theme_minimal()+
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
     ## Warning: Removed 28739 rows containing non-finite outside the scale range
@@ -303,6 +307,61 @@ ggplot(st_games, aes(x = discount_rate)) +
 **I think the best bin width would be 0.025, as it’s very clear to read
 the discount rate and the columns are not that thin or fat, which
 clearly shows the difference in numbers of games.**
+
+**Research question3: Do original and discount prices move together?**
+
+``` r
+# Create a categorical variable with 3 or more groups from an existing numerical variable. 
+# We can turn original_price into a price bucket.
+
+# This idea comes from Chat-GPT, because I am confused to the difference between this research question and the previous one, but anyway, I only refer the idea, codes are written by myself.
+
+st_games <- st_games %>%
+  mutate(price_bucket = case_when(
+    original_price < 10 ~ "$0–10",
+    original_price < 20 ~ "$10–20",
+    original_price < 50 ~ "$20–50",
+    original_price < 100  ~ "$50–100",
+    original_price >= 100 ~ "$100+",
+    TRUE ~ NA_character_))
+st_games <- st_games %>% #order the price buckets to make the data tidy
+  mutate(price_bucket = factor(price_bucket,levels = c("$0–10", "$10–20", "$20–50", "$50–100", "$100+")))
+q3_summary <- st_games %>%
+  count(price_bucket) 
+q3_summary
+```
+
+    ## # A tibble: 6 × 2
+    ##   price_bucket     n
+    ##   <fct>        <int>
+    ## 1 $0–10        26675
+    ## 2 $10–20        5424
+    ## 3 $20–50        2238
+    ## 4 $50–100        598
+    ## 5 $100+          545
+    ## 6 <NA>          5353
+
+``` r
+# Create a graph that has at least two geom layers: Columns, texts.
+q3_plot <- st_games %>%
+  group_by(price_bucket) %>%
+  summarise(n = n(),
+            median_dp = median(discount_price, na.rm = TRUE))
+ggplot(q3_plot, aes(x = price_bucket, y = median_dp)) +
+  geom_col(width = 0.5, fill = "grey") +                        
+  geom_text(aes(label = paste0("$", format(round(median_dp, 2), ))),
+            vjust = -0.5, size = 3) +  # text vjust were debugged by GPT.                           
+  labs(title = "Median discounted price by original price bucket",
+       x = "Original price bucket",
+       y = "Median discounted price") +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5))
+```
+
+![](mini-project-2_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+**Do achievements relate to price?**
+
 <!----------------------------------------------------------------------------->
 
 ### 1.3 (2 points)
