@@ -155,11 +155,11 @@ for!
 # Compute the price_range, mean, median, and max_price of original price across the groups of release_years.
 
 st_games <- datateachr::steam_games %>%
-separate(release_date,
-        into = c("month_day", "year"),
-        sep = ",\\s*",        
-        remove = FALSE) %>%
-mutate(release_year = as.integer(year)) 
+  separate(release_date,
+           into = c("month_day", "year"),
+           sep = ",\\s*",        
+           remove = FALSE) %>%
+  mutate(release_year = as.integer(year)) 
 ```
 
     ## Warning: Expected 2 pieces. Additional pieces discarded in 1 rows [36325].
@@ -178,13 +178,11 @@ mutate(release_year = as.integer(year))
 q1_summary  <- st_games %>%
   filter(!is.na(release_year)) %>%
   group_by(release_year) %>%
-  summarise(
-  n = n(),
-  price_range = max(original_price, na.rm = TRUE) - min(original_price, na.rm = TRUE),
-  mean_price  = mean(original_price, na.rm = TRUE),
-  median_price = median(original_price, na.rm = TRUE),
-  max_price   = max(original_price, na.rm = TRUE)
-  ) %>%
+  summarise(n = n(),
+            price_range = max(original_price, na.rm = TRUE) - min(original_price, na.rm = TRUE),
+            mean_price  = mean(original_price, na.rm = TRUE),
+            median_price = median(original_price, na.rm = TRUE),
+            max_price   = max(original_price, na.rm = TRUE)) %>%
 arrange(desc(release_year))
 ```
 
@@ -221,14 +219,13 @@ q1_summary
 # Make a graph where it makes sense to customize the alpha transparency.
 
 ggplot(st_games, aes(x = release_year, y = original_price)) +
-  geom_point(alpha = 0.2) +
+  geom_point(alpha = 0.5) +
   coord_cartesian(ylim = c(0, 700)) +
-  # by previous summary, we can see most of the price are under 700, so we can zoom the y axis for a clear view
-  labs(
-    title = "Original price vs release year",
-    x = "Release year",
-    y = "Original price") +
-  theme_minimal()
+# By previous summary, we can see most of the prices are under 700, so we can zoom the y axis for a clear view.
+  labs(title = "Original price vs release year",
+       x = "Release year",
+       y = "Original price") +
+theme_minimal()
 ```
 
     ## Warning: Removed 6116 rows containing missing values or values outside the scale range
@@ -236,6 +233,76 @@ ggplot(st_games, aes(x = release_year, y = original_price)) +
 
 ![](mini-project-2_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
+**Research question 2: How big are discounts??**
+
+``` r
+# Compute the number of discounted games and the proportion.
+# We need to first filter those original price that greater than 0, otherwise they couldn't be discounted.
+
+st_games <- st_games %>%
+  mutate(discount_rate = if_else(original_price > 0,(original_price - discount_price)/original_price, NA))
+
+q2_summary <- st_games %>%
+  summarise(num_discounted = sum(discount_rate > 0, na.rm = TRUE),
+            num_total = sum(!is.na(discount_rate)),
+            discounted_proportion = num_discounted / num_total)
+q2_summary
+```
+
+    ## # A tibble: 1 × 3
+    ##   num_discounted num_total discounted_proportion
+    ##            <int>     <int>                 <dbl>
+    ## 1           3129     12094                 0.259
+
+``` r
+# Create 3 histograms, with each histogram having different sized bins.
+# Bin1 with width = 0.05
+ggplot(st_games, aes(x = discount_rate)) +
+  geom_histogram(binwidth = 0.05, boundary = 0) +
+  coord_cartesian(xlim = c(0, 1)) +   
+  labs(title = "Discount rate with binwidth = 0.05",
+       x = "Discount rate", y = "Number of games") +
+  theme_minimal()
+```
+
+    ## Warning: Removed 28739 rows containing non-finite outside the scale range
+    ## (`stat_bin()`).
+
+![](mini-project-2_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+``` r
+# Bin1 with width = 0.025
+ggplot(st_games, aes(x = discount_rate)) +
+  geom_histogram(binwidth = 0.025, boundary = 0) +
+  coord_cartesian(xlim = c(0, 1)) +
+  labs(title = "Discount rate with binwidth = 0.025",
+       x = "Discount rate", y = "Number of games") +
+  theme_minimal()
+```
+
+    ## Warning: Removed 28739 rows containing non-finite outside the scale range
+    ## (`stat_bin()`).
+
+![](mini-project-2_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+
+``` r
+# Bin1 with width = 0.01
+ggplot(st_games, aes(x = discount_rate)) +
+  geom_histogram(binwidth = 0.01, boundary = 0) +
+  coord_cartesian(xlim = c(0, 1)) +
+  labs(title = "Discount rate with binwidth = 0.01",
+       x = "Discount rate", y = "Number of games") +
+  theme_minimal()
+```
+
+    ## Warning: Removed 28739 rows containing non-finite outside the scale range
+    ## (`stat_bin()`).
+
+![](mini-project-2_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+
+**I think the best bin width would be 0.025, as it’s very clear to read
+the discount rate and the columns are not that thin or fat, which
+clearly shows the difference in numbers of games.**
 <!----------------------------------------------------------------------------->
 
 ### 1.3 (2 points)
