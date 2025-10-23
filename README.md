@@ -31,6 +31,7 @@ questions in milestone 1.
 
 3.  **Installpackages datateachr, tidyverse**  
     `install.packages("devtools")`  
-    `devtools::install_github("UBC-MDS/datateachr")`
+    `devtools::install_github("UBC-MDS/datateachr")`  
+    `install.packages("here")`
 
 4.  **Knit the mini-project-x.Rmd file to view the analysis in HTML**
