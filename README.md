@@ -13,7 +13,7 @@ questions in milestone 1.
 
 - **milestone2** — *files for milestone2*
 
-- **output** — *some output figures for the two milestones*
+- **output** — *some output files from milestone2*
 
 - **README.md** - *main README file for the whole project*
 
