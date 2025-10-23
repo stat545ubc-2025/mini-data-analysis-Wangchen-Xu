@@ -1,0 +1,7 @@
+"0","st_games_model <- st_games %>%"
+"0","  dplyr::filter(!is.na(original_price), !is.na(discount_price))"
+"0","task3_1 <- lm(discount_price ~ original_price, data = st_games_model)"
+"0","task3_2 <- broom::tidy(task3_1) %>%"
+"0","  dplyr::filter(term == ""original_price"") %>%"
+"0","  dplyr::select(term, estimate, std.error,statistic, p.value)"
+"0","task3_2"

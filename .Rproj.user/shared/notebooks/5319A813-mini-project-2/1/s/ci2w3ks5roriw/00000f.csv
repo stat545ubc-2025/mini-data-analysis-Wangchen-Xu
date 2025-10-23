@@ -1,0 +1,5 @@
+"0","#install.packages(""here"")"
+"0","#install this package first."
+"0","library(here)    "
+"0",""
+"0","write_csv(q1_summary, here::here(""output"", ""summary_table_q1.csv""))"
