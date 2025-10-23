@@ -3,11 +3,13 @@ STAT 545A Mini Data Analysis Project 1
 
 ------------------------------------------------------------------------
 
-## 📚 **Folders in This Repository**
+## 📚 **Files in This Repository**
 
-- **mini-project1_files** — *Output files for milestone1*
+- **Model.rsd**
 
-- **mini-project2_files** — *Output files for milestone2*
+- **ModelTest.rsd**
+
+- **summary_table_q1.csv**
 
 - **README.md**
 
