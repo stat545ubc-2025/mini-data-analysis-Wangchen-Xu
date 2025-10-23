@@ -391,7 +391,14 @@ Produce something relevant from your fitted model: either predictions on Y, or a
 
 <!-------------------------- Start your work below ---------------------------->
 ```{r}
-
+st_games_model <- st_games %>%
+  dplyr::filter(!is.na(original_price), !is.na(discount_price))
+task3_1 <- lm(discount_price ~ original_price, data = st_games_model)
+task3_2 <- broom::tidy(task3_1) %>%
+  dplyr::filter(term == "original_price") %>%
+  dplyr::select(term, estimate, std.error,statistic, p.value)
+task3_2
+# estimate is the slope of the function, and p.value stands for the P value.
 ```
 <!----------------------------------------------------------------------------->
 
@@ -407,7 +414,13 @@ Take a summary table that you made from Task 1, and write it as a csv file in yo
 -   **Reproducibility criteria**: You should be able to delete the csv file, and remake it simply by knitting this Rmd file.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+#install.packages("here")
+#install this package first.
+library(here)    
 
+write_csv(q1_summary, here::here("output", "Summary_Table_q1.csv"))
+```
 <!----------------------------------------------------------------------------->
 
 ## 4.2 (3 points)
@@ -418,6 +431,11 @@ Write your model object from Task 3 to an R binary file (an RDS), and load it ag
 
 <!-------------------------- Start your work below ---------------------------->
 
+```{r}
+saveRDS(task3_1, here::here("output", "ModelTest.rsd"))
+task4_2_load <- readRDS(here::here("output", "ModelTest.rsd"))
+print(task4_2_load)
+```
 <!----------------------------------------------------------------------------->
 
 # Overall Reproducibility/Cleanliness/Coherence Checklist 

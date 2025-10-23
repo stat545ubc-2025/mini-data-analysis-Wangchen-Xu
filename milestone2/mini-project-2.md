@@ -640,6 +640,25 @@ Y, or a single value like a regression coefficient or a p-value.
 
 <!-------------------------- Start your work below ---------------------------->
 
+``` r
+st_games_model <- st_games %>%
+  dplyr::filter(!is.na(original_price), !is.na(discount_price))
+task3_1 <- lm(discount_price ~ original_price, data = st_games_model)
+task3_2 <- broom::tidy(task3_1) %>%
+  dplyr::filter(term == "original_price") %>%
+  dplyr::select(term, estimate, std.error,statistic, p.value)
+task3_2
+```
+
+    ## # A tibble: 1 × 5
+    ##   term           estimate std.error statistic  p.value
+    ##   <chr>             <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 original_price    0.220    0.0117      18.8 1.88e-77
+
+``` r
+# estimate is the slope of the function, and p.value stands for the P value.
+```
+
 <!----------------------------------------------------------------------------->
 
 # Task 4: Reading and writing data
@@ -662,6 +681,18 @@ file in your `output` folder. Use the `here::here()` function.
 
 <!-------------------------- Start your work below ---------------------------->
 
+``` r
+#install.packages("here")
+#install this package first.
+library(here)    
+```
+
+    ## here() starts at /Users/xuwangchen/Desktop/MEng2025/STAT545/miniproject1
+
+``` r
+write_csv(q1_summary, here::here("output", "Summary_Table_q1.csv"))
+```
+
 <!----------------------------------------------------------------------------->
 
 ## 4.2 (3 points)
@@ -673,6 +704,20 @@ Use the functions `saveRDS()` and `readRDS()`.
 - The same robustness and reproducibility criteria as in 4.1 apply here.
 
 <!-------------------------- Start your work below ---------------------------->
+
+``` r
+saveRDS(task3_1, here::here("output", "ModelTest.rsd"))
+task4_2_load <- readRDS(here::here("output", "ModelTest.rsd"))
+print(task4_2_load)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = discount_price ~ original_price, data = st_games_model)
+    ## 
+    ## Coefficients:
+    ##    (Intercept)  original_price  
+    ##        45.1184          0.2203
 
 <!----------------------------------------------------------------------------->
 
